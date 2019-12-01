@@ -11,4 +11,4 @@
 
 > [03_Introduction](https://derejekitaw.github.io/threeJS/01_Introduction/03-getting-start.html)
   
-  -> Add controller fro rotation and bouncing speed
+  -> Add controller for rotation and bouncing speed
