@@ -10,7 +10,8 @@ function init() {
   addCube(scene);
   addSphere(scene);
   addTree(scene);
-  addSpotLight(scene)
+  addSpotLight(scene);
+  addAmbienLight(scene);
   // add the output of the renderer to the html element
   document.getElementById('webgl-output').appendChild(renderer.domElement);
 
@@ -119,16 +120,20 @@ function addTree(scene) {
   scene.add(trunkMesh);
   scene.add(leavesMesh);
 }
-function addSpotLight(scene){
-  const spotLight = new THREE.SpotLight(0xFFFFFF);
+function addSpotLight(scene) {
+  const spotLight = new THREE.SpotLight(0xffffff);
   spotLight.position.set(-40, 40, -15);
   spotLight.castShadow = true;
   spotLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
   spotLight.shadow.camera.far = 130;
   spotLight.shadow.camera.near = 40;
 
-  // If you want a more detailled shadow you can increase the 
+  // If you want a more detailled shadow you can increase the
   // mapSize used to draw the shadows.
   // spotLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
   scene.add(spotLight);
+}
+function addAmbienLight(scene) {
+  const ambienLight = new THREE.AmbientLight(0x353535);
+  scene.add(ambienLight);
 }
