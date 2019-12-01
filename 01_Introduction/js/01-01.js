@@ -7,8 +7,8 @@ function init() {
   const camera = addCamera(scene);
   addAxis(scene);
   addPlane(scene);
-  addCube(scene);
-  addSphere(scene);
+  const cube = addCube(scene);
+  sphere = addSphere(scene);
   addTree(scene);
   addSpotLight(scene);
   addAmbienLight(scene);
@@ -16,12 +16,45 @@ function init() {
   document.getElementById('webgl-output').appendChild(renderer.domElement);
 
   // render the scene
-  renderer.render(scene, camera);
+  // renderer.render(scene, camera);
+  const stats = initStats();
+  let step = 0;
+  renderScene();
+  function renderScene() {
+    // rotate the cube around its axes
+    cube.rotation.x += 0.02;
+    cube.rotation.y += 0.02;
+    cube.rotation.z += 0.02;
+
+    // bounce the sphere up and down
+    step += 0.04;
+    sphere.position.x = 20 + 10 * Math.cos(step);
+    sphere.position.y = 2 + 10 * Math.abs(Math.sin(step));
+
+    // render using requestAnimationFrame
+    requestAnimationFrame(renderScene);
+    renderer.render(scene, camera);
+    stats.update();
+  }
+}
+function initStats() {
+  const stats = new Stats();
+  stats.setMode(0); // 0: fps, 1: ms
+
+  // Align top-left
+  stats.domElement.style.position = 'absolute';
+  stats.domElement.style.left = '0px';
+  stats.domElement.style.top = '0px';
+
+  document.getElementById('Stats-output').appendChild(stats.domElement);
+
+  return stats;
 }
 function addRenderer() {
   const renderer = new THREE.WebGLRenderer();
   renderer.setClearColor(new THREE.Color(0x000000));
   renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.shadowMap.enabled = true;
   return renderer;
 }
 function addCamera(scene) {
@@ -44,15 +77,17 @@ function addAxis(scene) {
 }
 function addPlane(scene) {
   // create the ground plane
-  const planeGeometry = new THREE.PlaneGeometry(60, 20);
+  const planeGeometry = new THREE.PlaneGeometry(60, 20, 1, 1);
   const planeMaterial = new THREE.MeshBasicMaterial({
-    color: 0xaaaaaa
+    color: 0xffffff
   });
   const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-
   // rotate and position the plane
   plane.rotation.x = -0.5 * Math.PI;
-  plane.position.set(15, 0, 0);
+  // plane.position.set(15, 0, 0);
+  plane.position.x = 15;
+  plane.position.y = 0;
+  plane.position.z = 0;
   plane.receiveShadow = true;
 
   // add the plane to the scene
@@ -73,6 +108,7 @@ function addCube(scene) {
   cube.position.z = 0;
   // add the cube to the scene
   scene.add(cube);
+  return cube;
 }
 function addSphere(scene) {
   const sphereGeometry = new THREE.SphereGeometry(4, 20, 20);
@@ -89,6 +125,7 @@ function addSphere(scene) {
   sphere.castShadow = true;
   // add the sphere to the scene
   scene.add(sphere);
+  return sphere;
 }
 function addTree(scene) {
   const trunk = new THREE.CubeGeometry(1, 8, 1);
