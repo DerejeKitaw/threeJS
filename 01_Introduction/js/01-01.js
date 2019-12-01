@@ -10,6 +10,7 @@ function init() {
   addCube(scene);
   addSphere(scene);
   addTree(scene);
+  addSpotLight(scene)
   // add the output of the renderer to the html element
   document.getElementById('webgl-output').appendChild(renderer.domElement);
 
@@ -89,17 +90,17 @@ function addSphere(scene) {
   scene.add(sphere);
 }
 function addTree(scene) {
-  var trunk = new THREE.CubeGeometry(1, 8, 1);
-  var leaves = new THREE.SphereGeometry(4);
+  const trunk = new THREE.CubeGeometry(1, 8, 1);
+  const leaves = new THREE.SphereGeometry(4);
 
   // create the mesh
-  var trunkMesh = new THREE.Mesh(
+  const trunkMesh = new THREE.Mesh(
     trunk,
     new THREE.MeshLambertMaterial({
       color: 0x8b4513
     })
   );
-  var leavesMesh = new THREE.Mesh(
+  const leavesMesh = new THREE.Mesh(
     leaves,
     new THREE.MeshLambertMaterial({
       color: 0x00ff00
@@ -117,4 +118,17 @@ function addTree(scene) {
 
   scene.add(trunkMesh);
   scene.add(leavesMesh);
+}
+function addSpotLight(scene){
+  const spotLight = new THREE.SpotLight(0xFFFFFF);
+  spotLight.position.set(-40, 40, -15);
+  spotLight.castShadow = true;
+  spotLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
+  spotLight.shadow.camera.far = 130;
+  spotLight.shadow.camera.near = 40;
+
+  // If you want a more detailled shadow you can increase the 
+  // mapSize used to draw the shadows.
+  // spotLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
+  scene.add(spotLight);
 }
